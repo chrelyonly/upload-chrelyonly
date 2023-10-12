@@ -77,12 +77,12 @@ axios.interceptors.response.use(res => {
   //获取状态码
   const status = res.data.code || res.status;
   const message = res.data.msg || res.data.error_description || '未知错误';
-  // 如果请求为非200否者默认统一处理
-  if (status !== 200) {
-    ElMessage.error(message);
-    return Promise.reject(new Error(message))
+  if (status >= 200 && status <= 500) {
+    return res;
   }
-  return res;
+  // 如果请求为非200否者默认统一处理
+  ElMessage.error(message);
+  return Promise.reject(new Error(message))
 }, error => {
   NProgress.done();
   return Promise.reject(new Error(error));

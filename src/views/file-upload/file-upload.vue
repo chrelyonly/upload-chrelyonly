@@ -68,10 +68,22 @@ export default {
             ],
           },
           {
+            label: "上传时间(上传后出现)",
+            prop: "uploadData",
+            overHidden: true,
+          },
+          {
             label: "文件链接(上传后出现)",
             prop: "url",
             type: 'upload',
             overHidden: true,
+          },
+          {
+            label: "上传进度",
+            prop: "percentage",
+            dataType: "number",
+            value: 0,
+            hide: true,
           },
         ]
       },
@@ -111,8 +123,8 @@ export default {
             this.$message.error('只允许上传图片 jpg png 类型的图片!')
             this.fileList.splice(i, 1)
             return
-          } else if (rawFile.size / 1024 / 1024 > 2) {
-            this.$message.error('每张文件大小需限制2M!')
+          } else if (rawFile.size / 1024 / 1024 > 5) {
+            this.$message.error('每张文件大小需限制5MB!')
             this.fileList.splice(i, 1)
             return
           }
@@ -203,6 +215,19 @@ export default {
         window.localStorage.setItem("data",JSON.stringify(this.data))
       })
     },
+    // 上传文件时模拟进度条
+    autoPercentage(row){
+      row.percentage = 0;
+      let timer = setInterval(() => {
+        // 加上随机数,模拟进度条
+        row.percentage += Math.floor(Math.random()*20);
+        if (row.percentage > 100) {
+          row.percentage = 100;
+          clearInterval(timer);
+        }
+      }, Math.floor(Math.random()*400));
+
+    },
   //   提交按钮
     uploadBtn(){
       let this1 = this;
@@ -216,6 +241,7 @@ export default {
             continue
           }
           if (this1.data[i].raw instanceof File){
+            this1.autoPercentage(this1.data[i])
             let params = {
               file: this1.data[i].raw,
               uid: this1.data[i].uid,
@@ -224,17 +250,29 @@ export default {
               "Content-Type": "multipart/form-data",
             }
             this1.$https("/oss/endpoint/put-files","post",params,2,headers).then( res=>{
-              for (let j = 0; j < this1.data.length; j++) {
-                // 上传成功设为1 已上传
-                if (this1.data[j].uid === res.data.data.uid){
-                  this1.data[j].uploadStatus = "1"
-                  this1.data[j].url = res.data.data.fileRes.link
-                  this1.uploadSuccess.push(this1.data[j])
+              setTimeout(()=>{
+                for (let j = 0; j < this1.data.length; j++) {
+                  if (res.data.code === 200){
+                    // 上传成功设为1 已上传
+                    if (this1.data[j].uid === res.data.data.uid){
+                      this1.data[j].uploadStatus = "1"
+                      this1.data[j].uploadData = new Date().Format("yyyy-MM-dd hh:mm:ss")
+                      this1.data[j].url = res.data.data.fileRes.link
+                      this1.data[j].percentage = 100
+                      this1.uploadSuccess.push(this1.data[j])
+                    }
+                  }else{
+                    // 上传失败设为2 上传失败
+                    if (this1.data[j].uid === res.data.data.uid){
+                      this1.data[j].uploadStatus = "2"
+                      this1.data[j].percentage = 100
+                      this1.data[j].uploadData = new Date().Format("yyyy-MM-dd hh:mm:ss")
+                    }
+                  }
                 }
-              }
-            }).then(()=>{
-            //   将data存入缓存,存缓存后 file类型将丢失
-              window.localStorage.setItem("data",JSON.stringify(this1.data))
+                //   将data存入缓存,存缓存后 file类型将丢失
+                window.localStorage.setItem("data",JSON.stringify(this1.data))
+              },1000)
             })
           }else {
             this1.$message.error("文件上传失败")
@@ -248,7 +286,7 @@ export default {
 </script>
 
 <template>
-  <basic-container>
+  <basic-container class="file-upload-my">
     <el-upload
       style="text-align: center; margin: 0 auto"
       drag
@@ -258,7 +296,7 @@ export default {
     >
       <el-icon class="el-icon--upload"><upload-filled /></el-icon>
       <div class="el-upload__text">拖动文件或点击上传</div>
-      <div class="el-upload__text">上传资源文件,每个文件允许上传大小为 10MB</div>
+      <div class="el-upload__text">上传资源文件,每个文件允许上传大小为 5MB</div>
       <template #file="scope">
         {{ scope }}
       </template>
@@ -282,9 +320,16 @@ export default {
         <el-tag type="warning">{{ scope.row.fileSize }}KB</el-tag>
       </template>
       <template #uploadStatus="scope">
-        <el-tag
-          v-if="scope.row?.uploadStatus"
-          :type="
+        <div style="width: 100%;">
+          <el-progress
+            v-if="scope.row?.percentage && scope.row?.percentage !== 0 && scope.row?.percentage !== 100"
+            :percentage="scope.row.percentage"
+            striped-flow
+            :indeterminate="true"
+            :stroke-width="25" striped />
+          <el-tag
+            v-else-if="scope.row?.uploadStatus"
+            :type="
             scope.row.uploadStatus === '1'
               ? 'success'
               : scope.row.uploadStatus === '2'
@@ -294,7 +339,8 @@ export default {
               : 'primary'
           "
           >{{ scope.row.$uploadStatus }}</el-tag
-        >
+          >
+        </div>
       </template>
       <template #menu="scope">
         <el-button type="text" @click.stop="cellClick(scope.row)"
@@ -326,8 +372,11 @@ export default {
   </basic-container>
 </template>
 
-<style>
-.el-upload-dragger {
+<style scoped>
+:deep(.el-upload-dragger)  {
   width: 100% !important;
+}
+:deep(.el-progress__text)  {
+  min-width: 0 !important;
 }
 </style>

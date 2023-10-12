@@ -18,6 +18,12 @@ export default defineConfig({
 // 代理配置
   server: {
     port: 5173,
+    // https: true,
+    https: {
+
+      cert: "./server.pem",
+      key: "./server.key",
+    },
     proxy: {
       '/api/': {
         // 代理到前端的地址的代理
