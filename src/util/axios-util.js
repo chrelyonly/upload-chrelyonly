@@ -4,7 +4,7 @@
  */
 import axios from 'axios';
 import {serialize} from '@/util/util';
-import {Message} from 'element-plus';
+import {ElMessage } from 'element-plus';
 import NProgress from 'nprogress';
 import 'nprogress/nprogress.css';
 // 加密解密工具,加密代替加签
@@ -79,10 +79,7 @@ axios.interceptors.response.use(res => {
   const message = res.data.msg || res.data.error_description || '未知错误';
   // 如果请求为非200否者默认统一处理
   if (status !== 200) {
-    Message({
-      message: message,
-      type: 'error'
-    });
+    ElMessage.error(message);
     return Promise.reject(new Error(message))
   }
   return res;

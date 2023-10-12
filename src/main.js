@@ -28,6 +28,9 @@ app.component('BasicContainer', basicContainer)
 app.component('basicBlock', basicBlock)
 // 引入时间扩展工具
 import "@/util/datePrototype"
+// 引入全局通用请求
+import {http} from '@/util/https.js';
+app.config.globalProperties.$https = http;
 // 自定义结束 ************************************************************
 app.use(createPinia())
 app.use(router)
