@@ -123,7 +123,7 @@ export default {
             this.$message.error('只允许上传图片 jpg png 类型的图片!')
             this.fileList.splice(i, 1)
             return
-          } else if (rawFile.size / 1024 / 1024 > 5) {
+          } else if (rawFile.size / 1024 / 1024 > 10) {
             this.$message.error('每张文件大小需限制5MB!')
             this.fileList.splice(i, 1)
             return
@@ -249,6 +249,7 @@ export default {
             let headers = {
               "Content-Type": "multipart/form-data",
             }
+            // 请在后端进行文件校验!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             this1.$https("/oss/endpoint/put-files","post",params,2,headers).then( res=>{
               setTimeout(()=>{
                 for (let j = 0; j < this1.data.length; j++) {
