@@ -1,41 +1,20 @@
-# upload-chrelyonly
+# 项目技术
+- vite4
+- vue3
+- vue-router
+- axios
+- crypto
+- pinia
+- element-plus
+- AVUE
+- ....................
 
-This template should help get you started developing with Vue 3 in Vite.
+# 开发环境开启了https+自定义证书
+![img.png](doc/img.png)
+# 浏览器会提示不安全，需要手动信任证书
+![img.png](doc/img2.png)
+# 安装后重启浏览器
+![img.png](doc/img3.png)
 
-## Recommended IDE Setup
+# 你也可以 无视 (浏览器会提示不安全),或者注释掉 vite.config的https
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
-
-## Customize configuration
-
-See [Vite Configuration Reference](https://vitejs.dev/config/).
-
-## Project Setup
-
-```sh
-npm install
-```
-
-### Compile and Hot-Reload for Development
-
-```sh
-npm run dev
-```
-
-### Compile and Minify for Production
-
-```sh
-npm run build
-```
-
-### Run Unit Tests with [Vitest](https://vitest.dev/)
-
-```sh
-npm run test:unit
-```
-
-### Lint with [ESLint](https://eslint.org/)
-
-```sh
-npm run lint
-```
