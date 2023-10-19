@@ -1,5 +1,5 @@
 <script>
-
+let this1;
 export default {
   name: 'fileUpload',
   data(){
@@ -97,6 +97,7 @@ export default {
     }
   },
   mounted() {
+    this1 = this;
     //   从缓存中获取data
     let data = window.localStorage.getItem("data")
     if (data){
@@ -112,40 +113,40 @@ export default {
     }
   },
   watch: {
-    fileList: {
-      handler: function (val) {
-
+    fileList: function(val,old){
       //   循环添加到data
-        for (let i = 0; i < val.length; i++) {
-          // 判断文件类型
-          let rawFile = val[i].raw
-          if (rawFile.type !== 'image/jpeg' && rawFile.type !== 'image/png') {
-            this.$message.error('只允许上传图片 jpg png 类型的图片!')
-            this.fileList.splice(i, 1)
-            return
-          } else if (rawFile.size / 1024 / 1024 > 10) {
-            this.$message.error('每张文件大小需限制5MB!')
-            this.fileList.splice(i, 1)
-            return
-          }
-          // 否则添加到data
-          let items = {
-            uid: val[i].uid + "",
-            fileName: val[i].name,
-            fileSize: (val[i].size/1024).toFixed(2),
-            fileType: val[i].raw.type,
-            uploadStatus: '3',
-            raw: val[i].raw
-          };
-          // 添加到第一个下标
-          this.data.unshift(items)
+      for (let i = 0; i < val.length; i++) {
+        // 判断文件类型
+        let rawFile = val[i].raw
+        if (rawFile.type !== 'image/jpeg' && rawFile.type !== 'image/png') {
+          this1.$message.error('只允许上传图片 jpg png 类型的图片!')
+          // this1.fileList.splice(i, 1)
+          return
+        } else if (rawFile.size / 1024 / 1024 > 10) {
+          this1.$message.error('每张文件大小需限制5MB!')
+          // this1.fileList.splice(i, 1)
+          return
         }
-        this.totalFunc()
-      //   置空文件列表
-        this.fileList = []
-      },
-      deep: true
-    }
+        // 否则添加到data
+        let items = {
+          uid: val[i].uid + "",
+          fileName: val[i].name,
+          fileSize: (val[i].size/1024).toFixed(2),
+          fileType: val[i].raw.type,
+          uploadStatus: '3',
+          raw: val[i].raw
+        };
+        // 添加到第一个下标
+        this1.data.unshift(items)
+      }
+      this1.totalFunc()
+
+      if(this1.fileList.length > 0){
+        //   置空文件列表
+        this1.fileList = []
+
+      }
+    },
   },
   methods:{
     totalFunc(){
@@ -293,7 +294,7 @@ export default {
       drag
       multiple
       :auto-upload="false"
-      v-model:file-list.sync="fileList"
+      v-model:file-list="fileList"
     >
       <el-icon class="el-icon--upload"><upload-filled /></el-icon>
       <div class="el-upload__text">拖动文件或点击上传</div>
