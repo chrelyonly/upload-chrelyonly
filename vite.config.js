@@ -27,7 +27,8 @@ export default defineConfig({
     proxy: {
       '/api/': {
         // 代理到前端的地址的代理
-        target: "https://temp-img.chrelyonly.cn/api",
+        target: "http://127.0.0.1:8090",
+        // target: "https://temp-img.chrelyonly.cn/api",
         // 是否跨域
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, '')
