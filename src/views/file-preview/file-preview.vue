@@ -1,5 +1,13 @@
 <template>
   <basic-container class="file-preview-page">
+    <!-- 显著提示 -->
+    <el-alert
+      title="⚠️ 所有上传图片将在 7 天后自动删除，请及时备份！"
+      type="warning"
+      show-icon
+      closable
+      style="margin-bottom: 20px;"
+    />
     <div class="header-bar">
       <el-input
         v-model="search"
