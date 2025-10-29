@@ -17,6 +17,7 @@
     "axios": "^1.13.1",
     "crypto-js": "^4.2.0",
     "element-plus": "^2.11.5",
+    "lodash": "^4.17.21",
     "nprogress": "^0.2.0",
     "pinia": "^3.0.3",
     "vite": "^7.1.12",
