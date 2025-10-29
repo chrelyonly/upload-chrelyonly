@@ -1,13 +1,14 @@
 <template>
-  <basic-container class="file-preview-page">
+  <basic-container class="file-preview-page cute-page">
     <!-- 显著提示 -->
     <el-alert
       title="⚠️ 所有上传图片将在 7 天后自动删除，请及时备份！"
       type="warning"
       show-icon
       closable
-      style="margin-bottom: 20px;"
+      class="cute-alert"
     />
+
     <div class="header-bar">
       <el-input
         v-model="search"
@@ -15,13 +16,16 @@
         clearable
         style="width: 300px;"
         @input="filterImages"
+        class="cute-input"
       >
         <el-button slot="append" icon="el-icon-search" @click="filterImages"></el-button>
       </el-input>
-      <el-button @click="uploadFlag = !uploadFlag" type="success">上传文件客户端</el-button>
+      <el-button @click="uploadFlag = !uploadFlag" type="success" class="cute-upload-btn">
+        🍓 上传莓莓图片
+      </el-button>
     </div>
 
-    <el-skeleton v-if="loading" rows="5" animated />
+    <el-skeleton v-if="loading" rows="5" animated class="cute-skeleton" />
 
     <div
       v-else
@@ -30,22 +34,25 @@
       @scroll="handleScroll"
     >
       <div v-if="displayGroups.length === 0">
-        <el-empty description="暂无图片"></el-empty>
+        <el-empty description="暂无图片" class="cute-empty"></el-empty>
       </div>
 
       <div v-for="group in displayGroups" :key="group.date" class="group-section">
-        <el-divider content-position="left">📅 {{ group.date }}</el-divider>
+        <el-divider content-position="left" class="cute-divider">
+          📅 {{ group.date }}
+        </el-divider>
 
         <div class="image-grid">
           <div v-for="url in group.images" :key="url" class="image-card">
             <el-image
               :src="url"
               fit="cover"
-              style="width: 150px; height: 150px; border-radius: 8px"
+              style="width: 150px; height: 150px; border-radius: 12px"
               :preview-src-list="group.images"
               lazy
+              class="cute-image"
             />
-            <div class="file-name">{{ url.split('/').pop() }}</div> <!-- 文件名显示 -->
+            <div class="file-name">{{ url.split('/').pop() }}</div>
             <div class="image-actions">
               <el-button size="small" type="primary" icon="el-icon-document-copy" @click="copyUrl(url)">
                 复制
@@ -61,10 +68,9 @@
       <div v-if="loadingMore" class="loading-more">
         <el-spinner type="circle" />
       </div>
-      <div v-if="allLoaded" class="all-loaded">
-        已加载全部图片
-      </div>
+      <div v-if="allLoaded" class="all-loaded">🍓 已加载全部图片 🍓</div>
     </div>
+
     <el-drawer size="70%" v-model="uploadFlag">
       <file-upload></file-upload>
     </el-drawer>
@@ -80,11 +86,11 @@ export default {
     return {
       loading: false,
       search: "",
-      allGroups: [],        // 所有图片按日期分组
-      filteredGroups: [],   // 搜索后的分组
-      displayGroups: [],    // 当前显示的分组
-      batchSize: 3,         // 每次加载几个日期节点
-      currentIndex: 0,      // 当前加载到第几个日期
+      allGroups: [],
+      filteredGroups: [],
+      displayGroups: [],
+      batchSize: 3,
+      currentIndex: 0,
       loadingMore: false,
       allLoaded: false,
       uploadFlag: false,
@@ -101,7 +107,7 @@ export default {
           this.displayGroups = [];
           this.currentIndex = 0;
           this.allLoaded = false;
-          this.loadMore(); // 初次加载
+          this.loadMore();
         } else {
           this.$message.error("加载图片失败: " + res.data.msg);
         }
@@ -143,7 +149,7 @@ export default {
           this.allLoaded = true;
         }
         this.loadingMore = false;
-      }, 300); // 模拟延迟
+      }, 300);
     },
     handleScroll() {
       const container = this.$refs.scrollContainer;
@@ -181,6 +187,86 @@ export default {
 </script>
 
 <style scoped>
+/* 可爱莓莓风 */
+.cute-page {
+  background: linear-gradient(to bottom, #fff0f5, #ffe6f0);
+  padding: 20px;
+  border-radius: 12px;
+  font-family: "Comic Sans MS", "Arial", sans-serif;
+}
+
+.cute-alert {
+  background-color: #fff0f5;
+  border-color: #ff85a2;
+  color: #ff4d6d;
+  font-weight: bold;
+  border-radius: 12px;
+}
+
+.header-bar {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.cute-input .el-input__inner {
+  border-radius: 20px;
+}
+
+.cute-upload-btn {
+  background-color: #ff5c7a;
+  color: #fff;
+  border-radius: 20px;
+  padding: 10px 20px;
+  font-weight: bold;
+  transition: all 0.3s;
+}
+
+.cute-upload-btn:hover {
+  transform: translateY(-3px) scale(1.05);
+}
+
+.image-scroll-container {
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.group-section {
+  margin-bottom: 30px;
+}
+
+.cute-divider {
+  color: #ff4d6d;
+  font-weight: bold;
+}
+
+.image-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.image-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: #ffe6f0;
+  padding: 10px;
+  border-radius: 12px;
+  box-shadow: 0 3px 6px rgba(255, 133, 162, 0.3);
+  transition: all 0.3s;
+}
+
+.image-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 12px rgba(255, 133, 162, 0.5);
+}
+
+.cute-image {
+  border-radius: 12px;
+}
+
 .file-name {
   margin-top: 5px;
   max-width: 150px;
@@ -189,40 +275,17 @@ export default {
   font-size: 12px;
   color: #555;
 }
-.file-preview-page {
-  padding: 20px;
-}
-.header-bar {
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  margin-bottom: 20px;
-}
-.image-scroll-container {
-  max-height: 80vh;
-  overflow-y: auto;
-}
-.group-section {
-  margin-bottom: 30px;
-}
-.image-grid {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 15px;
-}
-.image-card {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
+
 .image-actions {
   margin-top: 5px;
   display: flex;
   gap: 5px;
 }
+
 .loading-more, .all-loaded {
   text-align: center;
   padding: 10px 0;
-  color: #888;
+  color: #ff4d6d;
+  font-weight: bold;
 }
 </style>

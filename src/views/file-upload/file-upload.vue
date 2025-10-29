@@ -381,10 +381,97 @@ export default {
 </template>
 
 <style scoped>
-:deep(.el-upload-dragger)  {
+/* 上传区域 - 可爱风 */
+:deep(.el-upload-dragger) {
   width: 100% !important;
+  border: 2px dashed #ff85a2;
+  border-radius: 16px;
+  background-color: #fff0f5;
+  padding: 40px 20px;
+  text-align: center;
+  transition: all 0.3s;
 }
-:deep(.el-progress__text)  {
-  min-width: 0 !important;
+
+:deep(.el-upload-dragger:hover) {
+  background-color: #ffe6f0;
+  border-color: #ff5c7a;
 }
+
+:deep(.el-upload-dragger .el-icon--upload) {
+  font-size: 48px;
+  color: #ff5c7a;
+  margin-bottom: 10px;
+}
+
+:deep(.el-upload-dragger .el-upload__text) {
+  font-size: 18px;
+  font-weight: bold;
+  color: #ff4d6d;
+}
+
+:deep(.el-upload-dragger .el-upload__text + .el-upload__text) {
+  font-size: 14px;
+  color: #ff85a2;
+}
+
+/* 表格优化 - 可爱背景和圆角 */
+:deep(.avue-crud__table) {
+  background-color: #fff0f5;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+/* 进度条圆角 */
+:deep(.el-progress) {
+  border-radius: 12px;
+}
+
+/* 按钮可爱风 */
+:deep(.el-button) {
+  border-radius: 20px;
+  font-weight: bold;
+  transition: all 0.3s;
+  box-shadow: 0 4px 6px rgba(255, 92, 122, 0.2);
+}
+
+:deep(.el-button:hover) {
+  transform: translateY(-2px) scale(1.05);
+}
+
+/* 文件统计标签 */
+.upload-stats {
+  margin-top: 15px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+:deep(.upload-stats .el-tag) {
+  font-weight: bold;
+  border-radius: 12px;
+  box-shadow: 0 2px 4px rgba(255, 92, 122, 0.2);
+}
+
+/* 表格状态标签优化 */
+:deep(.el-tag) {
+  border-radius: 12px;
+  padding: 4px 10px;
+  font-weight: bold;
+}
+
+/* 小屏自适应 */
+@media (max-width: 768px) {
+  :deep(.el-upload-dragger) {
+    padding: 30px 10px;
+  }
+
+  :deep(.el-upload-dragger .el-icon--upload) {
+    font-size: 36px;
+  }
+
+  :deep(.el-upload-dragger .el-upload__text) {
+    font-size: 16px;
+  }
+}
+
 </style>
