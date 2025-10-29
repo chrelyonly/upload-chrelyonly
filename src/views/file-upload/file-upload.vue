@@ -163,6 +163,10 @@ export default {
       }
       done();
     },
+    retryUpload(row) {
+      row.uploadStatus = "3";
+      this.uploadBtn();
+    },
     cellClick(row){
       this.$Clipboard({
         text: row.url
@@ -350,6 +354,7 @@ export default {
                    icon="el-icon-view" >
           复制链接
         </el-button>
+        <el-button type="text" @click.stop="retryUpload(scope.row)">重新发送</el-button>
         <el-button type="text" @click.stop="delBtn(scope.row)"
                    icon="el-icon-view" >
           删除
