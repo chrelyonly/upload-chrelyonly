@@ -118,12 +118,13 @@ export default {
       for (let i = 0; i < val.length; i++) {
         // 判断文件类型
         let rawFile = val[i].raw
-        if (rawFile.type !== 'image/jpeg' && rawFile.type !== 'image/png') {
-          this1.$message.error('只允许上传图片 jpg png 类型的图片!')
-          // this1.fileList.splice(i, 1)
-          return
-        } else if (rawFile.size / 1024 / 1024 > 10) {
-          this1.$message.error('每张文件大小需限制5MB!')
+        // if (rawFile.type !== 'image/jpeg' && rawFile.type !== 'image/png') {
+        //   this1.$message.error('只允许上传图片 jpg png 类型的图片!')
+        //   // this1.fileList.splice(i, 1)
+        //   return
+        // } else
+          if (rawFile.size / 1024 / 1024 > 10) {
+          this1.$message.error('每张文件大小需限制10MB!')
           // this1.fileList.splice(i, 1)
           return
         }
@@ -298,7 +299,7 @@ export default {
     >
       <el-icon class="el-icon--upload"><upload-filled /></el-icon>
       <div class="el-upload__text">拖动文件或点击上传</div>
-      <div class="el-upload__text">上传资源文件,每个文件允许上传大小为 5MB</div>
+      <div class="el-upload__text">上传资源文件,每个文件允许上传大小为 10MB</div>
       <template #file="scope">
         {{ scope }}
       </template>
