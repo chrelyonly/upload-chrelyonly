@@ -1,0 +1,26 @@
+services:
+  chrelyonly-image-hosting-ui:
+    image: nginx:alpine    # 使用nginx最新镜像
+    container_name: chrelyonly-image-hosting-ui
+    volumes:
+      - /www/dk_project/dk_app/chrelyonly-image-hosting-ui/app/public:/usr/share/nginx/html  # 将public目录挂载到nginx的html目录
+      - /www/dk_project/dk_app/chrelyonly-image-hosting-ui/app/nginx.conf:/etc/nginx/nginx.conf  # 配置自定义的nginx配置文件
+    dns:
+      - 114.114.114.114
+      - 8.8.8.8
+    working_dir: /app
+    networks:
+      - my-network
+
+networks:
+  my-network:  # 定义自定义网络
+    name: my-network         # 可选：自定义网络名称
+    driver: bridge  # 使用默认的 bridge 网络驱动
+    ipam: # IP 地址管理配置（IP Address Management）
+      driver: default           # 使用默认 IPAM 驱动
+      config: # 子网配置（可多个）
+        - subnet: 172.20.0.0/16     # 子网网段 172.20.0.1 -- 172.20.255.254
+          gateway: 172.20.0.1       # 默认网关
+          aux_addresses: # 预留 IP 地址
+            host1: 172.20.0.2
+            host2: 172.20.0.3

@@ -4,7 +4,7 @@
     <div class="background-stars"></div>
 
     <div class="content-container">
-      <h1 class="title">欢迎来到萌萌图床 🐰🌸</h1>
+      <h1 class="title">欢迎来到莓莓图床 🍓🌸</h1>
       <p class="subtitle">上传和预览你的图片，享受可爱与便利！</p>
 
       <div class="button-group">
