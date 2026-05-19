@@ -15,7 +15,7 @@ export default defineConfig({
       '@': fileURLToPath(new URL('./src', import.meta.url))
     }
   },
-  base: "/image-hosting-ui",
+  base: "/",
 // 代理配置
   server: {
     port: 5173,
