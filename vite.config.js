@@ -28,8 +28,8 @@ export default defineConfig({
     proxy: {
       '/image-hosting-api/': {
         // 代理到前端的地址的代理
-        // target: "http://127.0.0.1:8090",
-        target: "https://nginx-2.frp.chrelyonly.cn/image-hosting-api",
+        target: "http://127.0.0.1:8090",
+        // target: "https://nginx-2.frp.chrelyonly.cn/image-hosting-api",
         // 是否跨域
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/image-hosting-api/, '')
