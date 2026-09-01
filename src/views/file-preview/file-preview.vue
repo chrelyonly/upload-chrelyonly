@@ -49,6 +49,7 @@
               fit="cover"
               style="width: 150px; height: 150px; border-radius: 12px"
               :preview-src-list="group.images"
+              preview-teleported
               lazy
               class="cute-image"
             />
